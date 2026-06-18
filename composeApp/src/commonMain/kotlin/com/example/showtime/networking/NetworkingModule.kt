@@ -3,6 +3,10 @@ package com.example.showtime.networking
 import com.example.showtime.auth.AuthApi
 import com.example.showtime.auth.SessionCoordinator
 import com.example.showtime.auth.createAuthApi
+import com.example.showtime.movies.data.MovieApi
+import com.example.showtime.movies.data.ShowtimeUserApi
+import com.example.showtime.movies.data.createMovieApi
+import com.example.showtime.movies.data.createShowtimeUserApi
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpResponseValidator
@@ -84,6 +88,14 @@ val networkingModule = module {
 
     single<AuthApi> {
         get<Ktorfit>().createAuthApi()
+    }
+
+    single<MovieApi> {
+        get<Ktorfit>().createMovieApi()
+    }
+
+    single<ShowtimeUserApi> {
+        get<Ktorfit>().createShowtimeUserApi()
     }
 }
 

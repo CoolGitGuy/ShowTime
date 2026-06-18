@@ -4,7 +4,8 @@ import com.example.showtime.session.SessionStorage
 import com.example.showtime.session.UserSession
 
 class SessionCoordinator(
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val userDataCleaner: UserDataCleaner?
 ) {
     suspend fun saveAuthResponse(response: AuthResponse) {
         sessionStorage.saveSession(
@@ -28,6 +29,9 @@ class SessionCoordinator(
     }
 
     suspend fun logout() {
+        sessionStorage.session.value?.userId?.let { userId ->
+            userDataCleaner?.clearUserData(userId)
+        }
         sessionStorage.clearSession()
     }
 }

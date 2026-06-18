@@ -18,6 +18,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.showtime.main.MainScreen
 
 @Composable
 fun AppShellScreen(
@@ -61,10 +62,7 @@ fun AppShellScreen(
         }
 
         composable(Destination.Main.route) {
-            ShellPlaceholderScreen(
-                title = "Main App Shell",
-                subtitle = "Movies, quiz, favorites and profile start here."
-            )
+            MainScreen()
         }
     }
 }

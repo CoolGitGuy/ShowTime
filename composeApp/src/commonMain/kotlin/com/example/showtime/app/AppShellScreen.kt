@@ -18,7 +18,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.showtime.auth.AuthScreen
+import com.example.showtime.auth.AuthViewModel
 import com.example.showtime.main.MainScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppShellScreen(
@@ -27,7 +30,11 @@ fun AppShellScreen(
     val navController = rememberNavController()
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(state.destination) {
+    LaunchedEffect(state.destination, state.isBootstrapping) {
+        if (state.isBootstrapping) {
+            return@LaunchedEffect
+        }
+
         val route = state.destination.route
         if (navController.currentDestination?.route == route) {
             return@LaunchedEffect
@@ -55,10 +62,8 @@ fun AppShellScreen(
         }
 
         composable(Destination.Auth.route) {
-            ShellPlaceholderScreen(
-                title = "Auth Landing",
-                subtitle = "Login and signup flow will live here."
-            )
+            val authViewModel = koinViewModel<AuthViewModel>()
+            AuthScreen(viewModel = authViewModel)
         }
 
         composable(Destination.Main.route) {

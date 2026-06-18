@@ -19,6 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.showtime.profile.ProfileScreen
+import com.example.showtime.profile.ProfileViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen() {
@@ -45,10 +48,15 @@ fun MainScreen() {
             }
         }
     ) { paddingValues ->
-        MainTabPlaceholder(
-            tab = selectedTab,
-            modifier = Modifier.padding(paddingValues)
-        )
+        if (selectedTab == MainTab.Profile) {
+            val profileViewModel = koinViewModel<ProfileViewModel>()
+            ProfileScreen(viewModel = profileViewModel)
+        } else {
+            MainTabPlaceholder(
+                tab = selectedTab,
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
     }
 }
 

@@ -6,7 +6,8 @@ import com.example.showtime.core.mvi.UiState
 
 object AppShellContract {
     data class State(
-        val destination: Destination = Destination.Splash
+        val destination: Destination = Destination.Splash,
+        val isBootstrapping: Boolean = true
     ) : UiState
 
     sealed interface Intent : UiIntent

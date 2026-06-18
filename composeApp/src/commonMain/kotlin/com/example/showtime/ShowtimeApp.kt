@@ -1,21 +1,16 @@
 package com.example.showtime
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.example.showtime.app.AppShellScreen
+import com.example.showtime.app.AppShellViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ShowtimeApp() {
+    val viewModel = koinViewModel<AppShellViewModel>()
+
     MaterialTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Showtime Starter")
-        }
+        AppShellScreen(viewModel = viewModel)
     }
 }

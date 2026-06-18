@@ -1,0 +1,108 @@
+package com.example.showtime.app
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.showtime.auth.AuthScreen
+import com.example.showtime.auth.AuthViewModel
+import com.example.showtime.main.MainScreen
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun AppShellScreen(
+    viewModel: AppShellViewModel
+) {
+    val navController = rememberNavController()
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(state.destination, state.isBootstrapping) {
+        if (state.isBootstrapping) {
+            return@LaunchedEffect
+        }
+
+        val route = state.destination.route
+        if (navController.currentDestination?.route == route) {
+            return@LaunchedEffect
+        }
+
+        navController.navigate(route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+
+    NavHost(
+        navController = navController,
+        startDestination = Destination.Splash.route
+    ) {
+        composable(Destination.Splash.route) {
+            ShellPlaceholderScreen(
+                title = "Loading session",
+                subtitle = "Preparing Showtime..."
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        composable(Destination.Auth.route) {
+            val authViewModel = koinViewModel<AuthViewModel>()
+            AuthScreen(viewModel = authViewModel)
+        }
+
+        composable(Destination.Main.route) {
+            MainScreen()
+        }
+    }
+}
+
+private val Destination.route: String
+    get() = when (this) {
+        Destination.Splash -> "splash"
+        Destination.Auth -> "auth"
+        Destination.Main -> "main"
+    }
+
+@Composable
+private fun ShellPlaceholderScreen(
+    title: String,
+    subtitle: String,
+    content: @Composable (() -> Unit)? = null
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            content?.invoke()
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}

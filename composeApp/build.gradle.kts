@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
@@ -43,11 +44,13 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
+            implementation(libs.compose.uiBackhandler)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.compose.materialIconsCore)
             implementation(libs.navigation.compose)
             implementation(libs.napier)
+            implementation(libs.kotlinx.datetime)
 
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -58,6 +61,15 @@ kotlin {
 
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.paging)
+            implementation(libs.androidx.sqlite.bundled)
+
+            implementation(libs.androidx.datastore)
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.androidx.paging.common)
+            implementation(libs.androidx.paging.compose)
         }
 
         commonTest.dependencies {
@@ -106,4 +118,11 @@ ktorfit {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

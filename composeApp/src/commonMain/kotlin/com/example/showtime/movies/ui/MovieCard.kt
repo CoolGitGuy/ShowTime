@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -59,7 +58,7 @@ fun MovieCard(
                 Text(
                     text = buildString {
                         append(movie.year ?: "Unknown year")
-                        movie.imdbRating?.let { append("  •  IMDb ").append(it) }
+                        movie.imdbRating?.let { append(" | IMDb ").append(it) }
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
